@@ -17,7 +17,12 @@ def create_delivery_note(json_data):
         so_detail = frappe.get_value("Sales Order Item", {"parent": sales_order, "item_code": item.item_code}, ["so_detail"])
         if sales_order:
             item.against_sales_order = sales_order
+        else:
+            return {"status":"404", "message":f"Tidak terdapat Sales Order dengan Customer Purchase Order {data["po_no"]}"}
         if so_detail:
             item.so_detail = so_detail
+        else:
+            return {"status":"404", "message":f"Tidak terdapat Item {item.item_code} pada Sales Order {sales_order}"}
     doc.insert()
     doc.save()
+    return {"status":"200", "message":"Delivery Note ERP berhasil dibuat"}
