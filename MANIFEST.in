@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include erp_portal_api *.css
+recursive-include erp_portal_api *.csv
+recursive-include erp_portal_api *.html
+recursive-include erp_portal_api *.ico
+recursive-include erp_portal_api *.js
+recursive-include erp_portal_api *.json
+recursive-include erp_portal_api *.md
+recursive-include erp_portal_api *.png
+recursive-include erp_portal_api *.py
+recursive-include erp_portal_api *.svg
+recursive-include erp_portal_api *.txt
+recursive-exclude erp_portal_api *.pyc
