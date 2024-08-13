@@ -13,15 +13,17 @@ def create_delivery_note():
     doc.po_no = data["po_no"]
     doc.dn_no = data["dn_no"]
     doc.vehicle_no = data["vehicle_no"]
-    sales_order, customer_po_date, set_warehouse = frappe.get_value("Sales Order", {"po_no": data["po_no"]}, ["name", "po_date", "set_warehouse"])
+    doc.selling_price_list = "Standard Selling"
+    sales_order = frappe.get_value("Sales Order", {"po_no": data["po_no"]}, ["name"])
+    if not sales_order:
+        return {"status":"404", "message":f"Tidak terdapat Sales Order dengan Customer Purchase Order {data['po_no']}"}
+    customer_po_date = frappe.get_value("Sales Order", {"po_no": data["po_no"]}, ["po_date"])
+    set_warehouse = frappe.get_value("Sales Order", {"po_no": data["po_no"]}, ["set_warehouse"])
     doc.set_warehouse = set_warehouse
     doc.po_date = customer_po_date
     for item in data["items"]:
         so_detail = frappe.get_value("Sales Order Item", {"parent": sales_order, "item_code": item["item_code"]}, ["name"])
-        if sales_order:
-            item["against_sales_order"] = sales_order
-        else:
-            return {"status":"404", "message":f"Tidak terdapat Sales Order dengan Customer Purchase Order {data['po_no']}"}
+        item["against_sales_order"] = sales_order
         
         if so_detail:
             item["so_detail"] = so_detail
